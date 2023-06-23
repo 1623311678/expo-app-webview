@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const path = require("path");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
-const TerserPlugin = require("terser-webpack-plugin");
-const { merge } = require('webpack-merge');
-const Base = require('./webpack.base.config')
+const path = require("path")
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin")
+const TerserPlugin = require("terser-webpack-plugin")
+const { merge } = require("webpack-merge")
+const Base = require("./webpack.base.config")
 
-const resolve = path.resolve.bind(path, __dirname);
-const dashboardBuildPath = path.resolve(__dirname,'../dist')
-const publicPath = "./";
-const fileLoaderPath = "file-loader?name=[name].[hash].[ext]";
-const prodConfig =  {
+const resolve = path.resolve.bind(path, __dirname)
+const dashboardBuildPath = path.resolve(__dirname, "../dist")
+const publicPath = "./"
+const fileLoaderPath = "file-loader?name=[name].[hash].[ext]"
+const prodConfig = {
   mode: "production",
   devtool: false,
-  output:{
+  output: {
     chunkFilename: `[name].[chunkhash].js`,
     filename: `[name].[chunkhash].js`,
     path: resolve(dashboardBuildPath),
@@ -23,19 +23,15 @@ const prodConfig =  {
     rules: [
       {
         include: [
-          path.resolve(__dirname,'../node_modules'),
-          path.resolve(__dirname,'../assets'),
+          path.resolve(__dirname, "../node_modules"),
+          path.resolve(__dirname, "../assets")
         ],
         loader: fileLoaderPath,
         test: /\.(eot|otf|png|gif|svg|jpg|ttf|woff|woff2)(\?v=[0-9.]+)?$/
       },
       {
         test: /.s?css$/,
-        use: [
-         MiniCssExtractPlugin.loader,
-          "css-loader",
-          "sass-loader"
-        ].concat([
+        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"].concat([
           // {
           //   loader: "sass-resources-loader",
           //   options: {
@@ -105,6 +101,14 @@ const prodConfig =  {
           test: /(?<!node_modules.*)[\\/]node_modules[\\/](moment|moment-timezone)[\\/]/,
           priority: 24,
           enforce: true
+        },
+        // 打包第三方库的文件
+        vendor: {
+          name: "vendor",
+          test: /[\\/]node_modules[\\/]/,
+          chunks: "initial",
+          priority: 10,
+          minChunks: 2 // 同时引用了2次才打包
         }
       }
     },
@@ -123,7 +127,7 @@ const prodConfig =  {
         minify: CssMinimizerPlugin.cleanCssMinify
       }),
       new TerserPlugin({
-        include: path.resolve(__dirname,'../src'),
+        include: path.resolve(__dirname, "../src"),
         exclude: /node_modules/,
         terserOptions: {
           ecma: 5,
@@ -145,8 +149,8 @@ const prodConfig =  {
     new MiniCssExtractPlugin({
       filename: "[name].[contenthash].css",
       chunkFilename: "[id].[contenthash].css"
-    }),
+    })
   ]
-};
+}
 
-module.exports = merge(Base,prodConfig)
+module.exports = merge(Base, prodConfig)

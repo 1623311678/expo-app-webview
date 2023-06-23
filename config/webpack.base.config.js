@@ -22,7 +22,8 @@ const pathsPlugin = new TsconfigPathsPlugin({
 
 module.exports = {
   entry: {
-    main: path.resolve(__dirname, "../src/app.tsx")
+    main: path.resolve(__dirname, "../src/app.tsx"),
+    previewPdf: path.resolve(__dirname, "../src/previewPDFApp.tsx")
   },
   resolve: {
     extensions: [".js", ".jsx", ".ts", ".tsx"],
@@ -35,6 +36,11 @@ module.exports = {
     rules: [
       {
         exclude: /node_modules/,
+        // exclude: function(modulePath) {
+        //   return (
+        //     /node_modules/.test(modulePath) && !/pdfjs-dist/.test(modulePath)
+        //   )
+        // },
         loader: "happypack/loader?id=happybabel",
         // options: { 使用happypack, 需要把options写到对应的plugin里
         //   configFile: resolve("./babel.config.js")
@@ -58,7 +64,18 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: "fitshop",
       template: path.resolve(__dirname, "../public/index.html"), // 源模板文件
-      filename: "index.html"
+      filename: "index.html",
+      chunks: ["main", "chunk-react", "vendor"], //需要引入的js文件名称
+      hash: true, //引入产出的资源时加上哈希避免缓存
+      inject: true
+    }),
+    new HtmlWebpackPlugin({
+      title: "previewPDF",
+      template: path.resolve(__dirname, "../public/previewPDF.html"), // 源模板文件
+      filename: "previewPDF.html",
+      chunks: ["previewPdf", "chunk-react", "vendor",'pdfjsWorker'],
+      hash: true, //引入产出的资源时加上哈希避免缓存
+      inject: true
     }),
     // 把public中的文件复制到dist文件中
     new CopyPlugin([
