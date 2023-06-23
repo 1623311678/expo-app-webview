@@ -7,7 +7,7 @@ const { merge } = require("webpack-merge")
 const Base = require("./webpack.base.config")
 
 const resolve = path.resolve.bind(path, __dirname)
-const dashboardBuildPath = path.resolve(__dirname, "../dist")
+const dashboardBuildPath = path.resolve(__dirname, "../hundun-web-view")
 const publicPath = "./"
 const fileLoaderPath = "file-loader?name=[name].[hash].[ext]"
 const prodConfig = {

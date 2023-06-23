@@ -83,7 +83,7 @@ module.exports = {
         // 从public中复制文件
         from: path.resolve(__dirname, "../public"),
         // 把复制的文件存放到dis里面
-        to: path.resolve(__dirname, "../dist")
+        to: path.resolve(__dirname, "../hundun-web-view")
       }
     ])
   ]
