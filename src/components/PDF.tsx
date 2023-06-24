@@ -91,7 +91,10 @@ class File extends React.Component<any, any> {
         <div className={"view"}>
           <div className={"pageContainer"}>
             <Document
-              file="https://pdf.dfcfw.com/pdf/H3_AP202304201585601855_1.pdf?1681977223000.pdf"
+              file={
+                this.props.previewurl ||
+                "https://pdf.dfcfw.com/pdf/H3_AP202304201585601855_1.pdf?1681977223000.pdf"
+              }
               onLoadSuccess={this.onDocumentLoadSuccess}
               loading={<SpinLoading color="primary" />}>
               <Page pageNumber={pageNumber} width={pageWidth} />
@@ -113,6 +116,15 @@ class File extends React.Component<any, any> {
           <div onClick={this.pageZoomOut}>缩小</div>
           <div onClick={this.pageFullscreen}>
             {fullscreen ? "退出" : "全屏"}
+          </div>
+          <div
+            onClick={() => {
+              const pWin: any = window
+              if (pWin.postMessage2) {
+                pWin.postMessage2("Web-TO-RN")
+              }
+            }}>
+            发消息
           </div>
         </div>
       </div>
